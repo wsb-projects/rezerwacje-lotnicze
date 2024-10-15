@@ -4,6 +4,12 @@ public class CargoFlight : BaseFlight
 {
     [Required]
     public int CargoWeight { get; set; }
+    
     [Required]
     public int CargoVolume { get; set; }
+
+    public CargoFlight()
+    {
+        FlightType = FlightType.CargoFlight;
+    }
 }
