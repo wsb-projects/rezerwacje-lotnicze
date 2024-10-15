@@ -2,6 +2,7 @@ namespace DefaultNamespace;
 
 public abstract class BaseFlight
 {
+    [Key]
     public int Id { get; private set; }
 
     [Required]
