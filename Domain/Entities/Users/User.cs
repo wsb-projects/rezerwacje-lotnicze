@@ -1,13 +1,18 @@
-namespace DefaultNamespace;
+using System.ComponentModel.DataAnnotations;
+using rezerwacje_lotnicze.Domain.Entities.Tickets;
 
-public class User
+namespace rezerwacje_lotnicze.Domain.Entities.User
 {
-    [Key]
-    public int Id { get; set; }
+    public class User
+    {
+        [Key]
+        public int Id { get; set; }
 
-    [Required]
-    [StringLength(100)]
-    public string Name { get; set; }
+        [Required]
+        [StringLength(100)]
+        public string Name { get; set; }
 
-    public ICollection<BaseTicket> Tickets { get; set; } = new List<BaseTicket>();
+        public ICollection<BaseTicket> Tickets { get; set; } = new List<BaseTicket>();
+    } 
 }
+

@@ -1,15 +1,19 @@
-namespace DefaultNamespace;
+using System.ComponentModel.DataAnnotations;
 
-public class CargoTicket : BaseTicket
+namespace rezerwacje_lotnicze.Domain.Entities.Tickets
 {
-    [Required]
-    public int CargoWeight { get; set; }
-
-    [Required]
-    public int CargoVolume { get; set; }
-
-    public CargoTicket()
+    public class CargoTicket : BaseTicket
     {
-        TicketType = TicketType.CargoTicket;
+        [Required]
+        public int CargoWeight { get; set; }
+
+        [Required]
+        public int CargoVolume { get; set; }
+
+        public CargoTicket()
+        {
+            TicketType = TicketType.CargoTicket;
+        }
     }
 }
+

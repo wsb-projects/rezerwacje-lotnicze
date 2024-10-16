@@ -1,12 +1,16 @@
-namespace DefaultNamespace;
+using System.ComponentModel.DataAnnotations;
 
-public class PassengerTicket : BaseTicket
+namespace rezerwacje_lotnicze.Domain.Entities.Tickets
 {
-    [Required]
-    public int NumberOfSeats { get; set; }
-
-    public PassengerTicket()
+    public class PassengerTicket : BaseTicket
     {
-        TicketType = TicketType.PassengerTicket;
+        [Required]
+        public int NumberOfSeats { get; set; }
+
+        public PassengerTicket()
+        {
+            TicketType = TicketType.PassengerTicket;
+        }
     }
 }
+

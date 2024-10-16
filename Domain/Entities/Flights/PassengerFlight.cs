@@ -1,15 +1,18 @@
-namespace DefaultNamespace;
+using System.ComponentModel.DataAnnotations;
 
-public class PassengerFlight : BaseFlight
+namespace rezerwacje_lotnicze.Domain.Entities.Flights
 {
-    [Required]
-    public int SeatsCapacity { get; set; }
-
-    [Required]
-    public double SeatPrice { get; set; }
-
-    public PassengerFlight()
+    public class PassengerFlight : BaseFlight
     {
-        FlightType = FlightType.PassengerFlight;
+        [Required]
+        public int SeatsCapacity { get; set; }
+
+        [Required]
+        public double SeatPrice { get; set; }
+
+        public PassengerFlight()
+        {
+            FlightType = FlightType.PassengerFlight;
+        }
     }
 }

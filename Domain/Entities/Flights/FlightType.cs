@@ -1,7 +1,8 @@
-namespace DefaultNamespace;
-
-public enum FlightType
+namespace rezerwacje_lotnicze.Domain.Entities.Flights
 {
-    PassengerFlight,
-    CargoFlight
+    public enum FlightType
+    {
+        PassengerFlight,
+        CargoFlight
+    }
 }

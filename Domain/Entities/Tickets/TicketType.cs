@@ -1,7 +1,8 @@
-namespace DefaultNamespace;
-
-public enum TicketType
+namespace rezerwacje_lotnicze.Domain.Entities.Tickets
 {
-    PassengerTicket,
-    CargoTicket
+    public enum TicketType
+    {
+        PassengerTicket,
+        CargoTicket
+    }
 }
