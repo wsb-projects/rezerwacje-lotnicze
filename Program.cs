@@ -1,19 +1,3 @@
-using System.Data;
-using Npgsql;
-
-{
-    var connString = "Host=localhost;Username=admin;Password=admin;Database=rezerwacjelotnicze";
-    await using var conn = new NpgsqlConnection(connString);
-    await conn.OpenAsync();
-    
-    // List all tables in the public schema
-    await using var cmd = new NpgsqlCommand("SELECT table_name FROM information_schema.tables", conn);
-    await using var reader = await cmd.ExecuteReaderAsync();
-    while (await reader.ReadAsync())
-    {
-        Console.WriteLine(reader.GetString(0));
-    }
-}
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
