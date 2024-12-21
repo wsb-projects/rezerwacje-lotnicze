@@ -123,8 +123,8 @@ namespace rezerwacje_lotnicze.Migrations
                 {
                     b.HasBaseType("rezerwacje_lotnicze.Domain.Entities.Flights.BaseFlight");
 
-                    b.Property<double>("SeatPrice")
-                        .HasColumnType("double precision");
+                    b.Property<long>("SeatPrice")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("SeatsCapacity")
                         .HasColumnType("integer");

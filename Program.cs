@@ -10,12 +10,11 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
+    app.Services.ApplyMigrations();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
-
-app.Services.ApplyMigrations();
 
 app.Run();

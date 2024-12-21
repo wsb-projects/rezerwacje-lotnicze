@@ -8,7 +8,7 @@ namespace rezerwacje_lotnicze.Domain.Entities.Flights
         public int SeatsCapacity { get; set; }
 
         [Required]
-        public double SeatPrice { get; set; }
+        public uint SeatPrice { get; set; }
 
         public PassengerFlight()
         {
