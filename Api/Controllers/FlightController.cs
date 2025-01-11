@@ -8,10 +8,17 @@ namespace rezerwacje_lotnicze.Api.Controllers
     public class FlightController : ControllerBase
     {
         private readonly IFlightService _flightService;
-    
+
         public FlightController(IFlightService flightService)
         {
             _flightService = flightService;
         }
+
+        [HttpGet("GetFlights")]
+        public async Task<IActionResult> GetFlights()
+        {
+            return Ok(await _flightService.GetFlights());
+        }
     }
+
 }
