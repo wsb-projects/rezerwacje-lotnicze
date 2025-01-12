@@ -7,28 +7,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace rezerwacje_lotnicze.Migrations
 {
     /// <inheritdoc />
-    public partial class IdentityDbContext : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Tickets_Users_UserId",
-                table: "Tickets");
-
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_Users",
-                table: "Users");
-
-            migrationBuilder.RenameTable(
-                name: "Users",
-                newName: "User");
-
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_User",
-                table: "User",
-                column: "Id");
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -66,6 +49,19 @@ namespace rezerwacje_lotnicze.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "User",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_User", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -174,6 +170,56 @@ namespace rezerwacje_lotnicze.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Tickets",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    TicketType = table.Column<int>(type: "integer", nullable: false),
+                    CargoWeight = table.Column<int>(type: "integer", nullable: true),
+                    CargoVolume = table.Column<int>(type: "integer", nullable: true),
+                    NumberOfSeats = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tickets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tickets_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Flights",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    FlightType = table.Column<int>(type: "integer", nullable: false),
+                    DepartureLocation = table.Column<string>(type: "character varying(60)", maxLength: 60, nullable: false),
+                    ArrivalLocation = table.Column<string>(type: "character varying(60)", maxLength: 60, nullable: false),
+                    DepartureDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ArrivalDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    BaseTicketId = table.Column<int>(type: "integer", nullable: true),
+                    CargoWeight = table.Column<int>(type: "integer", nullable: true),
+                    CargoVolume = table.Column<int>(type: "integer", nullable: true),
+                    SeatsCapacity = table.Column<int>(type: "integer", nullable: true),
+                    SeatPrice = table.Column<long>(type: "bigint", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Flights", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Flights_Tickets_BaseTicketId",
+                        column: x => x.BaseTicketId,
+                        principalTable: "Tickets",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -211,22 +257,20 @@ namespace rezerwacje_lotnicze.Migrations
                 column: "NormalizedUserName",
                 unique: true);
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Tickets_User_UserId",
+            migrationBuilder.CreateIndex(
+                name: "IX_Flights_BaseTicketId",
+                table: "Flights",
+                column: "BaseTicketId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tickets_UserId",
                 table: "Tickets",
-                column: "UserId",
-                principalTable: "User",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                column: "UserId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Tickets_User_UserId",
-                table: "Tickets");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -243,31 +287,19 @@ namespace rezerwacje_lotnicze.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Flights");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_User",
-                table: "User");
+            migrationBuilder.DropTable(
+                name: "Tickets");
 
-            migrationBuilder.RenameTable(
-                name: "User",
-                newName: "Users");
-
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_Users",
-                table: "Users",
-                column: "Id");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Tickets_Users_UserId",
-                table: "Tickets",
-                column: "UserId",
-                principalTable: "Users",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+            migrationBuilder.DropTable(
+                name: "User");
         }
     }
 }

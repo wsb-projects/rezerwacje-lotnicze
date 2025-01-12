@@ -12,8 +12,8 @@ using rezerwacje_lotnicze.Infrastructure;
 namespace rezerwacje_lotnicze.Migrations
 {
     [DbContext(typeof(FlightBookingDbContext))]
-    [Migration("20250106160817_IdentityDbContext")]
-    partial class IdentityDbContext
+    [Migration("20250112192039_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
