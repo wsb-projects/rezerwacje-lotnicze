@@ -1,7 +1,11 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace rezerwacje_lotnicze.Domain.Entities.Flights
 {
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "flightType")]
+    [JsonDerivedType(typeof(PassengerFlight), typeDiscriminator: "0")]
+    [JsonDerivedType(typeof(CargoFlight), typeDiscriminator: "1")]
     public abstract class BaseFlight
     {
         [Key]
@@ -25,4 +29,3 @@ namespace rezerwacje_lotnicze.Domain.Entities.Flights
         public DateTime ArrivalDate { get; set; }
     }
 }
-
