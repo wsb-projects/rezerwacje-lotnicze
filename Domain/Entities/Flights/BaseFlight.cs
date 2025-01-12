@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using rezerwacje_lotnicze.Domain.Entities.Tickets;
 
 namespace rezerwacje_lotnicze.Domain.Entities.Flights
 {
@@ -27,5 +28,7 @@ namespace rezerwacje_lotnicze.Domain.Entities.Flights
 
         [Required]
         public DateTime ArrivalDate { get; set; }
+
+        public ICollection<BaseTicket> Tickets { get; set; } = new List<BaseTicket>();
     }
 }

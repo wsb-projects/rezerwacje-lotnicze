@@ -4,6 +4,6 @@ namespace rezerwacje_lotnicze.Application.Interfaces
 {
     public interface ITicketService
     {
-        public Task<BaseTicket> GetFlightAsync(int id);
+        public Task<ICollection<BaseTicket>> GetTickets(string userId);
     }
 }
