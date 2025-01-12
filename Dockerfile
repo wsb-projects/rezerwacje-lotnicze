@@ -6,6 +6,8 @@ COPY Properties ./
 COPY appsettings.json ./
 COPY appsettings.Development.json ./
 COPY rezerwacje-lotnicze.csproj ./
+COPY Api ./
+COPY Application ./
 COPY Domain ./
 COPY Infrastructure ./
 COPY Migrations ./
