@@ -7,7 +7,7 @@ using rezerwacje_lotnicze.Domain.Entities.User;
 
 namespace rezerwacje_lotnicze.Infrastructure;
 
-public class FlightBookingDbContext : IdentityDbContext<IdentityUser>
+public class FlightBookingDbContext : IdentityDbContext<User>
 {
     public FlightBookingDbContext(DbContextOptions<FlightBookingDbContext> options) : base(options)
     {
@@ -24,6 +24,10 @@ public class FlightBookingDbContext : IdentityDbContext<IdentityUser>
             .HasDiscriminator<TicketType>("TicketType")
             .HasValue<PassengerTicket>(TicketType.PassengerTicket)
             .HasValue<CargoTicket>(TicketType.CargoTicket);
+
+        modelBuilder.Entity<BaseTicket>()
+            .HasOne(t => t.Flight)
+            .WithMany(f => f.Tickets);
 
         modelBuilder.Entity<BaseFlight>()
             .HasDiscriminator<FlightType>("FlightType")

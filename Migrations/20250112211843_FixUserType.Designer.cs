@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using rezerwacje_lotnicze.Infrastructure;
@@ -11,9 +12,11 @@ using rezerwacje_lotnicze.Infrastructure;
 namespace rezerwacje_lotnicze.Migrations
 {
     [DbContext(typeof(FlightBookingDbContext))]
-    partial class FlightBookingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250112211843_FixUserType")]
+    partial class FixUserType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -170,6 +173,9 @@ namespace rezerwacje_lotnicze.Migrations
                         .HasMaxLength(60)
                         .HasColumnType("character varying(60)");
 
+                    b.Property<int?>("BaseTicketId")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime>("DepartureDate")
                         .HasColumnType("timestamp with time zone");
 
@@ -182,6 +188,8 @@ namespace rezerwacje_lotnicze.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BaseTicketId");
 
                     b.ToTable("Flights");
 
@@ -198,9 +206,6 @@ namespace rezerwacje_lotnicze.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("FlightId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("TicketType")
                         .HasColumnType("integer");
 
@@ -209,8 +214,6 @@ namespace rezerwacje_lotnicze.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("FlightId");
 
                     b.HasIndex("UserId");
 
@@ -385,28 +388,27 @@ namespace rezerwacje_lotnicze.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("rezerwacje_lotnicze.Domain.Entities.Flights.BaseFlight", b =>
+                {
+                    b.HasOne("rezerwacje_lotnicze.Domain.Entities.Tickets.BaseTicket", null)
+                        .WithMany("Flights")
+                        .HasForeignKey("BaseTicketId");
+                });
+
             modelBuilder.Entity("rezerwacje_lotnicze.Domain.Entities.Tickets.BaseTicket", b =>
                 {
-                    b.HasOne("rezerwacje_lotnicze.Domain.Entities.Flights.BaseFlight", "Flight")
-                        .WithMany("Tickets")
-                        .HasForeignKey("FlightId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("rezerwacje_lotnicze.Domain.Entities.User.User", "User")
                         .WithMany("Tickets")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Flight");
-
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("rezerwacje_lotnicze.Domain.Entities.Flights.BaseFlight", b =>
+            modelBuilder.Entity("rezerwacje_lotnicze.Domain.Entities.Tickets.BaseTicket", b =>
                 {
-                    b.Navigation("Tickets");
+                    b.Navigation("Flights");
                 });
 
             modelBuilder.Entity("rezerwacje_lotnicze.Domain.Entities.User.User", b =>
