@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using rezerwacje_lotnicze.Infrastructure;
@@ -11,9 +12,11 @@ using rezerwacje_lotnicze.Infrastructure;
 namespace rezerwacje_lotnicze.Migrations
 {
     [DbContext(typeof(FlightBookingDbContext))]
-    partial class FlightBookingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250112220042_CorrectTicketMapping")]
+    partial class CorrectTicketMapping
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,21 @@ namespace rezerwacje_lotnicze.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("BaseFlightBaseTicket", b =>
+                {
+                    b.Property<int>("BaseTicketId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("FlightsId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("BaseTicketId", "FlightsId");
+
+                    b.HasIndex("FlightsId");
+
+                    b.ToTable("BaseFlightBaseTicket");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -198,9 +216,6 @@ namespace rezerwacje_lotnicze.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("FlightId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("TicketType")
                         .HasColumnType("integer");
 
@@ -209,8 +224,6 @@ namespace rezerwacje_lotnicze.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("FlightId");
 
                     b.HasIndex("UserId");
 
@@ -334,6 +347,21 @@ namespace rezerwacje_lotnicze.Migrations
                     b.HasDiscriminator().HasValue(0);
                 });
 
+            modelBuilder.Entity("BaseFlightBaseTicket", b =>
+                {
+                    b.HasOne("rezerwacje_lotnicze.Domain.Entities.Tickets.BaseTicket", null)
+                        .WithMany()
+                        .HasForeignKey("BaseTicketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("rezerwacje_lotnicze.Domain.Entities.Flights.BaseFlight", null)
+                        .WithMany()
+                        .HasForeignKey("FlightsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -387,26 +415,13 @@ namespace rezerwacje_lotnicze.Migrations
 
             modelBuilder.Entity("rezerwacje_lotnicze.Domain.Entities.Tickets.BaseTicket", b =>
                 {
-                    b.HasOne("rezerwacje_lotnicze.Domain.Entities.Flights.BaseFlight", "Flight")
-                        .WithMany("Tickets")
-                        .HasForeignKey("FlightId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("rezerwacje_lotnicze.Domain.Entities.User.User", "User")
                         .WithMany("Tickets")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Flight");
-
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("rezerwacje_lotnicze.Domain.Entities.Flights.BaseFlight", b =>
-                {
-                    b.Navigation("Tickets");
                 });
 
             modelBuilder.Entity("rezerwacje_lotnicze.Domain.Entities.User.User", b =>
