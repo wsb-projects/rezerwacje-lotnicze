@@ -10,10 +10,11 @@ namespace rezerwacje_lotnicze.Infrastructure.Extensions
         public static void SeedDatabase(this WebApplication app)
         {
             using var scope = app.Services.CreateScope();
-            var dbContext = scope.ServiceProvider.GetRequiredService<FlightBookingDbContext>();
             var flightSeeder = scope.ServiceProvider.GetRequiredService<FlightSeeder>();
+            var userSeeder = scope.ServiceProvider.GetRequiredService<UserSeeder>();
 
             flightSeeder.SeedAsync().Wait();
+            userSeeder.SeedAsync().Wait();
         }
     }
 }

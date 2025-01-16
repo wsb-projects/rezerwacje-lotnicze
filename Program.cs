@@ -13,18 +13,21 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IFlightService, FlightService>();
-builder.Services.AddScoped<ITicketService, TicketService>();
-builder.Services.AddScoped<FlightSeeder>();
-
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme);
 
 builder.Services.AddIdentityCore<User>()
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<FlightBookingDbContext>()
     .AddApiEndpoints();
 
 builder.Services.AddFlightBookingDbContext(builder.Configuration);
+
+
+builder.Services.AddScoped<IFlightService, FlightService>();
+builder.Services.AddScoped<ITicketService, TicketService>();
+builder.Services.AddScoped<UserSeeder>();
+builder.Services.AddScoped<FlightSeeder>();
 
 var app = builder.Build();
 
