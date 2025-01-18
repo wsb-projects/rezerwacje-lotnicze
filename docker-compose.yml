@@ -22,3 +22,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+
+  frontend:
+    image: ghcr.io/wsb-projects/rezerwacje-lotnicze-frontend:main
+    network_mode: host
