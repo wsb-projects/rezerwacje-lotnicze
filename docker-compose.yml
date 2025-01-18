@@ -13,8 +13,8 @@ services:
       timeout: 5s
       retries: 5
 
-  rezerwacje-lotnicze:
-    build: .
+  backend:
+    image: ghcr.io/wsb-projects/rezerwacje-lotnicze:main
     ports:
       - "8080:8080"
     environment:
@@ -22,3 +22,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+
+  frontend:
+    image: ghcr.io/wsb-projects/rezerwacje-lotnicze-frontend:main
+    network_mode: host

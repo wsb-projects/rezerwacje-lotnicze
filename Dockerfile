@@ -6,14 +6,15 @@ COPY Properties ./
 COPY appsettings.json ./
 COPY appsettings.Development.json ./
 COPY rezerwacje-lotnicze.csproj ./
+
+# Restore as distinct layers
+RUN dotnet restore
+
 COPY Api ./
 COPY Application ./
 COPY Domain ./
 COPY Infrastructure ./
 COPY Migrations ./
-
-# Restore as distinct layers
-RUN dotnet restore
 
 COPY Program.cs ./
 
