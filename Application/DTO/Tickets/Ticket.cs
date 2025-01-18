@@ -12,17 +12,6 @@ namespace rezerwacje_lotnicze.Application.DTO.Tickets
         public int FlightId { get; set; }
     }
 
-    public class PassengerTicket : Ticket
-    {
-        [JsonPropertyName("seats")]
-        public int NumberOfSeats { get; set; }
-    }
 
-    public class CargoTicket : Ticket
-    {
-        [JsonPropertyName("weight")]
-        public int Weight { get; set; }
-        [JsonPropertyName("volume")]
-        public int Volume { get; set; }
-    }
+
 }
