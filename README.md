@@ -8,16 +8,18 @@ The **Flight Reservations** project is an application that allows users to book 
 - 🔍 Searching for available flights
 - ✈️ Booking airline tickets
 - 🗂️ Managing reservations
-- 📧 Email notifications about reservation status
 
 ## 🛠 Technologies
 - **Programming Language**: C#
 - **Containerization**: Docker
 
 ## 📋 System Requirements
-- .NET Core SDK
 - Docker
 - Docker Compose
+
+## 🔧 Development Requirements
+- .NET Core 8.0
+- ASP.NET Core 8.0
 
 ## 🚀 Installation
 To run the project locally, follow these steps:
@@ -32,11 +34,15 @@ To run the project locally, follow these steps:
     ```
 3. Build and run the Docker container:
     ```bash
-    docker-compose up --build
+    docker-compose up
     ```
 
 ## 🖥 Usage
-Once the application is running, it will be available at `http://localhost:8080`.
+Once the application is running, frontend and backend can be accesses at:
+| service | address |
+|---------|---------|
+| backend | [`http://localhost:8080`](http://localhost:8080) |
+| frontend | [`http://localhost:5000`](http://localhost:5000) |
 
 ## 👥 Contribution
 If you want to contribute to the project, please submit pull requests. Also, please report issues and suggest features on the Issues page.
