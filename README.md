@@ -8,16 +8,18 @@ The **Flight Reservations** project is an application that allows users to book 
 - 🔍 Searching for available flights
 - ✈️ Booking airline tickets
 - 🗂️ Managing reservations
-- 📧 Email notifications about reservation status
 
 ## 🛠 Technologies
 - **Programming Language**: C#
 - **Containerization**: Docker
 
 ## 📋 System Requirements
-- .NET Core SDK
 - Docker
 - Docker Compose
+
+## 🔧 Development Requirements
+- .NET Core 8.0
+- ASP.NET Core 8.0
 
 ## 🚀 Installation
 To run the project locally, follow these steps:
