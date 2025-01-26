@@ -13,34 +13,20 @@ builder.Services.AddControllersWithViews().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
-builder.Services.AddAuthorization();
-builder.Services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme);
-
-builder.Services.AddIdentityCore<User>()
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<FlightBookingDbContext>()
-    .AddApiEndpoints();
-
+builder.Services.AddSwaggerServices();
+builder.Services.AddIdentityServices();
 builder.Services.AddFlightBookingDbContext(builder.Configuration);
-
-
-builder.Services.AddScoped<IFlightService, FlightService>();
-builder.Services.AddScoped<ITicketService, TicketService>();
-builder.Services.AddScoped<UserSeeder>();
-builder.Services.AddScoped<FlightSeeder>();
+builder.Services.AddApplicationServices();
 
 var app = builder.Build();
 
 app.Services.ApplyMigrations();
-app.SeedDatabase();
+await app.SeedDatabase();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerWithUI();
 }
 
 app.UseHttpsRedirection();
