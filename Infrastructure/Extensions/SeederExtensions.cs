@@ -17,11 +17,11 @@ namespace rezerwacje_lotnicze.Infrastructure.Extensions
             using var scope = app.Services.CreateScope();
             var flightSeeder = scope.ServiceProvider.GetRequiredService<FlightSeeder>();
             var userSeeder = scope.ServiceProvider.GetRequiredService<UserSeeder>();
+            
+            app.Services.ApplyMigrations();
 
             await flightSeeder.SeedAsync();
             await userSeeder.SeedAsync();
-            
-            app.Services.ApplyMigrations();
         }
     }
 }
