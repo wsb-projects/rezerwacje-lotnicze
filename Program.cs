@@ -23,7 +23,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.MapControllers();
 app.MapIdentityRoutes();
+app.MapControllers();
 
 app.Run();
