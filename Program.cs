@@ -13,6 +13,7 @@ builder.Services.AddIdentityServices();
 builder.Services.AddFlightBookingDbContext(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.RegisterSeeders();
+builder.Services.AddCorsPolicy();
 
 var app = builder.Build();
 
@@ -23,7 +24,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.MapControllers();
+app.UseCorsPolicy();
 app.MapIdentityRoutes();
+app.MapControllers();
 
 app.Run();
