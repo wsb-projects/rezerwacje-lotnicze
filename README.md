@@ -13,6 +13,12 @@ The **Flight Reservations** project is an application that allows users to book 
 - **Programming Language**: C#
 - **Containerization**: Docker
 
+## 💡 Object-Oriented Programming (OOP) Elements
+- **Inheritance**: Inheriting from .NET classes, such as in the Controllers and Identity components.
+- **Polymorphism**: Extending `BaseTicket` and `BaseFlight` classes to customize model fields.
+- **Encapsulation**: Using `private readonly` access modifiers to protect data.
+- **Abstraction**: Implementing interfaces like `ITicketService` and `IFlightService` to hide implementation details.
+
 ## 📋 System Requirements
 - Docker
 - Docker Compose
