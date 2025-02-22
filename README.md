@@ -42,6 +42,7 @@ To run the project locally, follow these steps:
     ```bash
     docker-compose up
     ```
+4. Frontend can be accessed at [`http://localhost:5173`](http://localhost:5173)
 
 ## 🖥 Usage
 Once the application is running, frontend and backend can be accesses at:
