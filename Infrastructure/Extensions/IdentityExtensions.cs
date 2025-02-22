@@ -12,15 +12,26 @@ public static class IdentityExtensions
             .AddEntityFrameworkStores<FlightBookingDbContext>()
             .AddApiEndpoints();
 
-        services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme);
-        
+        services.AddCors(options =>
+        {
+            options.AddPolicy(name: "allowall",
+                policy =>
+                {
+                    policy.WithOrigins("http://localhost:5173").AllowCredentials().AllowAnyHeader().AllowAnyMethod();
+                });
+        });
+
+        services.AddAuthentication(options => { options.DefaultAuthenticateScheme = IdentityConstants.BearerScheme; })
+            .AddBearerToken(IdentityConstants.BearerScheme);
+
         services.AddAuthorization();
 
         return services;
     }
-    
+
     public static void MapIdentityRoutes(this WebApplication app)
     {
+        app.UseCors("allowall");
         app.MapIdentityApi<User>();
     }
 }
