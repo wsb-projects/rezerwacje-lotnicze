@@ -1,6 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.IdentityModel.Tokens;
 using rezerwacje_lotnicze.Application.Interfaces;
 using rezerwacje_lotnicze.Domain.Entities.User;
@@ -17,7 +18,8 @@ public static class IdentityExtensions
 
         services.AddIdentityCore<User>()
             .AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<FlightBookingDbContext>();
+            .AddEntityFrameworkStores<FlightBookingDbContext>()
+            .AddSignInManager();
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>

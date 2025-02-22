@@ -4,28 +4,30 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using rezerwacje_lotnicze.Application.Interfaces;
 
-namespace rezerwacje_lotnicze.Infrastructure.Identity;
-
-public class AuthService : IAuthService
+namespace rezerwacje_lotnicze.Infrastructure.Identity
 {
-    public string GenerateJwtToken(string username)
+    public class AuthService : IAuthService
     {
-        var claims = new[]
+        public string GenerateJwtToken(string username)
         {
-            new Claim(JwtRegisteredClaimNames.Sub, username),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        };
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, username),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("yourSecretKey"));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("yourSecretKey"));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        var token = new JwtSecurityToken(
-            issuer: "yourIssuer",
-            audience: "yourAudience",
-            claims: claims,
-            expires: DateTime.Now.AddMinutes(30),
-            signingCredentials: creds);
+            var token = new JwtSecurityToken(
+                issuer: "http://localhost:8080",
+                audience: "http://localhost:8080",
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(30),
+                signingCredentials: creds
+            );
 
-        return new JwtSecurityTokenHandler().WriteToken(token);
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
     }
 }
