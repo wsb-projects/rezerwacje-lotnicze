@@ -30,7 +30,7 @@ public static class IdentityExtensions
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = "http://localhost:8080",
                     ValidAudience = "http://localhost:8080",
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("yourSecretKey")),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("yourSuperSecretKeyThatIsSuperSecret")),
                     ClockSkew = TimeSpan.Zero
                 };
                 
