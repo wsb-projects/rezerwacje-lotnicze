@@ -1,7 +1,6 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.IdentityModel.Tokens;
 using rezerwacje_lotnicze.Application.Interfaces;
 using rezerwacje_lotnicze.Domain.Entities.User;
@@ -11,8 +10,10 @@ namespace rezerwacje_lotnicze.Infrastructure.Extensions;
 
 public static class IdentityExtensions
 {
-    public static IServiceCollection AddIdentityServices(this IServiceCollection services)
+    public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration configuration)
     {
+        var jwtSettings = configuration.GetSection("JwtSettings");
+        
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IAuthService, AuthService>();
 
@@ -30,9 +31,9 @@ public static class IdentityExtensions
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = "http://localhost:8080",
-                    ValidAudience = "http://localhost:8080",
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("yourSuperSecretKeyThatIsSuperSecret")),
+                    ValidIssuer = jwtSettings["Issuer"],
+                    ValidAudience = jwtSettings["Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"])),
                     ClockSkew = TimeSpan.Zero
                 };
                 
@@ -49,6 +50,5 @@ public static class IdentityExtensions
     {
         app.UseAuthentication();
         app.UseAuthorization();
-        app.MapIdentityApi<User>();
     }
 }
