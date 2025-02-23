@@ -49,7 +49,7 @@ Once the application is running, frontend and backend can be accesses at:
 | service | address |
 |---------|---------|
 | backend | [`http://localhost:8080`](http://localhost:8080) |
-| frontend | [`http://localhost:5000`](http://localhost:5000) |
+| frontend | [`http://localhost:5173`](http://localhost:5173) |
 
 ## 👥 Contribution
 If you want to contribute to the project, please submit pull requests. Also, please report issues and suggest features on the Issues page.
