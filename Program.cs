@@ -9,17 +9,17 @@ builder.Services.AddControllersWithViews().AddJsonOptions(options =>
 });
 
 builder.Services.AddSwaggerServices();
-builder.Services.AddIdentityServices();
+builder.Services.AddIdentityServices(builder.Configuration);
 builder.Services.AddFlightBookingDbContext(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.RegisterSeeders();
-builder.Services.AddCorsPolicy();
+builder.Services.AddCorsPolicy(builder.Configuration);
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwaggerWithUI();
+    app.UseSwaggerWithUi();
     await app.SeedDatabase();
 }
 

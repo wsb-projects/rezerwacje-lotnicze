@@ -9,7 +9,7 @@ public static class SwaggerExtensions
         return services;
     }
     
-    public static IApplicationBuilder UseSwaggerWithUI(this IApplicationBuilder app)
+    public static IApplicationBuilder UseSwaggerWithUi(this IApplicationBuilder app)
     {
         app.UseSwagger();
         app.UseSwaggerUI();

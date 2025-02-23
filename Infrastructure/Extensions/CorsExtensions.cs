@@ -1,12 +1,16 @@
+namespace rezerwacje_lotnicze.Infrastructure.Extensions;
+
 public static class CorsExtensions
 {
-    public static IServiceCollection AddCorsPolicy(this IServiceCollection services)
+    public static IServiceCollection AddCorsPolicy(this IServiceCollection services, IConfiguration configuration)
     {
+        var jwtSettings = configuration.GetSection("JwtSettings");
+        
         services.AddCors(options =>
         {
             options.AddPolicy("AllowFrontend", builder =>
             {
-                builder.WithOrigins("http://localhost:3000") // Your frontend URL
+                builder.WithOrigins(jwtSettings["Issuer"])
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials();

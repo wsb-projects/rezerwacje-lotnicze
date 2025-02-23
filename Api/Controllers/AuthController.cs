@@ -30,6 +30,7 @@ public class AuthController : ControllerBase
         return Ok(new { Token = token });
     }
     
+    [HttpPost("login")]
     public IActionResult Login(string username, string password)
     {
         if (username == "validUser" && password == "validPassword")
