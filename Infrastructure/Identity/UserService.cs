@@ -7,48 +7,42 @@ namespace rezerwacje_lotnicze.Infrastructure.Identity;
 public class UserService : IUserService
 {
     private readonly UserManager<User> _userManager;
-    private readonly SignInManager<User> _signInManager;
+    private readonly IAuthService _authService;
 
-    public UserService(UserManager<User> userManager, SignInManager<User> signInManager)
+    public UserService(UserManager<User> userManager, SignInManager<User> signInManager, IAuthService authService)
     {
         _userManager = userManager;
-        _signInManager = signInManager;
+        _authService = authService;
     }
 
-    public async Task<ServiceResult> Register(RegisterModel model)
+    public async Task<ServiceResult<string>> RegisterAsync(RegisterModel model)
     {
-        var existingUser = await _userManager.FindByNameAsync(model.Username);
-        if (existingUser != null)
-        {
-            return new ServiceResult(false, "User already exists.");
-        }
+        if (await _userManager.FindByNameAsync(model.Username) != null)
+            return ServiceResult<string>.Fail("User already exists.");
 
         var user = new User { UserName = model.Username };
         var result = await _userManager.CreateAsync(user, model.Password);
 
-        if (result.Succeeded)
-        {
-            return new ServiceResult(true, "User registered successfully.");
-        }
+        if (!result.Succeeded)
+            return ServiceResult<string>.Fail(string.Join(", ", result.Errors.Select(e => e.Description)));
 
-        return new ServiceResult(false, string.Join(", ", result.Errors.Select(e => e.Description)));
+        await _userManager.AddToRoleAsync(user, "user");
+
+        var token = _authService.GenerateJwtToken(user.UserName);
+        return ServiceResult<string>.Ok("User registered successfully.", token);
     }
 
-    public async Task<ServiceResult> Login(LoginModel model)
+    public async Task<ServiceResult<string>> LoginAsync(LoginModel model)
     {
         var user = await _userManager.FindByNameAsync(model.Username);
         if (user == null)
-        {
-            return new ServiceResult(false, "Invalid username or password.");
-        }
+            return ServiceResult<string>.Fail("Invalid username or password.");
 
-        var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);
+        var passwordValid = await _userManager.CheckPasswordAsync(user, model.Password);
+        if (!passwordValid)
+            return ServiceResult<string>.Fail("Invalid username or password.");
 
-        if (result.Succeeded)
-        {
-            return new ServiceResult(true, "Login successful.");
-        }
-
-        return new ServiceResult(false, "Invalid username or password.");
+        var token = _authService.GenerateJwtToken(user.UserName);
+        return ServiceResult<string>.Ok("Login successful.", token);
     }
 }

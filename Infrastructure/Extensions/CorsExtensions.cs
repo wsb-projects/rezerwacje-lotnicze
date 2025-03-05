@@ -10,7 +10,7 @@ public static class CorsExtensions
         {
             options.AddPolicy("AllowFrontend", builder =>
             {
-                builder.WithOrigins(jwtSettings["Issuer"])
+                builder.WithOrigins("http://localhost:5173")
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials();

@@ -8,37 +8,26 @@ namespace rezerwacje_lotnicze.Api.Controllers;
 [ApiController]
 public class AuthController : ControllerBase
 {
-    private readonly IAuthService _authService;
     private readonly IUserService _userService;
 
-    public AuthController(IAuthService authService, IUserService userService)
+    public AuthController(IUserService userService)
     {
-        _authService = authService;
         _userService = userService;
     }
     
     [HttpPost("register")]
-    public IActionResult Register([FromBody] RegisterModel model)
+    public async Task<IActionResult> Register([FromBody] RegisterModel model)
     {
-        var result = _userService.Register(model);
-        if (!result.Result.Success)
-        {
-            return BadRequest(result.Result.Message);
-        }
-
-        var token = _authService.GenerateJwtToken(model.Username);
-        return Ok(new { Token = token });
+        var result = await _userService.RegisterAsync(model);
+        if (!result.Success) return BadRequest(result.Message);
+        return Ok(new { Message = result.Message });
     }
-    
+
     [HttpPost("login")]
-    public IActionResult Login(string username, string password)
+    public async Task<IActionResult> Login([FromBody] LoginModel model)
     {
-        if (username == "validUser" && password == "validPassword")
-        {
-            var token = _authService.GenerateJwtToken(username);
-            return Ok(new { token });
-        }
-        return Unauthorized();
+        var result = await _userService.LoginAsync(model);
+        if (!result.Success) return Unauthorized(result.Message);
+        return Ok(new { Token = result.Message });
     }
-
 }

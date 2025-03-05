@@ -5,6 +5,6 @@ namespace rezerwacje_lotnicze.Application.Interfaces;
 
 public interface IUserService
 {
-    Task<ServiceResult> Register(RegisterModel model);
-    Task<ServiceResult> Login(LoginModel model);
+    Task<ServiceResult<string>> RegisterAsync(RegisterModel model);
+    Task<ServiceResult<string>> LoginAsync(LoginModel model);
 }
