@@ -28,6 +28,6 @@ public class AuthController : ControllerBase
     {
         var result = await _userService.LoginAsync(model);
         if (!result.Success) return Unauthorized(result.Message);
-        return Ok(new { Token = result.Message });
+        return Ok(new { Token = result.Data });
     }
 }

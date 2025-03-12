@@ -1,50 +1,46 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using rezerwacje_lotnicze.Application.Interfaces;
 using rezerwacje_lotnicze.Domain.Entities.User;
 
-namespace rezerwacje_lotnicze.Infrastructure.Identity
+namespace rezerwacje_lotnicze.Infrastructure.Identity;
+
+public class AuthService : IAuthService
 {
-    public class AuthService : IAuthService
+    private readonly UserManager<User> _userManager;
+
+    public AuthService(UserManager<User> userManager)
     {
-        private readonly UserManager<User> _userManager;
+        _userManager = userManager;
+    }
 
-        public AuthService(UserManager<User> userManager)
+    public string GenerateJwtToken(User user)
+    {
+        var roles = _userManager.GetRolesAsync(user).Result;
+
+        var claims = new List<Claim>
         {
-            _userManager = userManager;
-        }
+            new(JwtRegisteredClaimNames.Sub, user.Id),
+            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        };
 
-        public string GenerateJwtToken(string username)
-        {
-            var user = _userManager.FindByNameAsync(username).Result;
-            var roles = _userManager.GetRolesAsync(user).Result;
+        foreach (var role in roles) claims.Add(new Claim(ClaimTypes.Role, role));
 
-            var claims = new List<Claim>
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, username),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
+        var key = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes("aVeryLongSuperSecretKeyWithEnoughLength12345678!@#"));
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            foreach (var role in roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role));
-            }
+        var token = new JwtSecurityToken(
+            "http://localhost:8080",
+            "http://localhost:8080",
+            claims,
+            expires: DateTime.Now.AddMinutes(30),
+            signingCredentials: creds
+        );
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("aVeryLongSuperSecretKeyWithEnoughLength12345678!@#"));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var token = new JwtSecurityToken(
-                issuer: "http://localhost:8080",
-                audience: "http://localhost:8080",
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(30),
-                signingCredentials: creds
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
+        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }
