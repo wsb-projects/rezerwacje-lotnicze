@@ -6,8 +6,8 @@ namespace rezerwacje_lotnicze.Infrastructure.Identity;
 
 public class UserService : IUserService
 {
-    private readonly UserManager<User> _userManager;
     private readonly IAuthService _authService;
+    private readonly UserManager<User> _userManager;
 
     public UserService(UserManager<User> userManager, SignInManager<User> signInManager, IAuthService authService)
     {
@@ -28,7 +28,7 @@ public class UserService : IUserService
 
         await _userManager.AddToRoleAsync(user, "user");
 
-        var token = _authService.GenerateJwtToken(user.UserName);
+        var token = _authService.GenerateJwtToken(user);
         return ServiceResult<string>.Ok("User registered successfully.", token);
     }
 
@@ -42,7 +42,7 @@ public class UserService : IUserService
         if (!passwordValid)
             return ServiceResult<string>.Fail("Invalid username or password.");
 
-        var token = _authService.GenerateJwtToken(user.UserName);
+        var token = _authService.GenerateJwtToken(user);
         return ServiceResult<string>.Ok("Login successful.", token);
     }
 }

@@ -1,6 +1,8 @@
+using rezerwacje_lotnicze.Domain.Entities.User;
+
 namespace rezerwacje_lotnicze.Application.Interfaces;
 
 public interface IAuthService
 {
-    string GenerateJwtToken(string username);
+    string GenerateJwtToken(User user);
 }
