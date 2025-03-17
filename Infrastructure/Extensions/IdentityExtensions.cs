@@ -45,7 +45,7 @@ public static class IdentityExtensions
 
         return services;
     }
-    
+
     public static void MapIdentityRoutes(this WebApplication app)
     {
         app.UseAuthentication();
