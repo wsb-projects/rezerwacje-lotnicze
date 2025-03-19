@@ -1,28 +1,45 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using rezerwacje_lotnicze.Application.Interfaces;
 using rezerwacje_lotnicze.Domain.Entities.User;
+using rezerwacje_lotnicze.Infrastructure.Identity;
 
 namespace rezerwacje_lotnicze.Infrastructure.Extensions;
 
 public static class IdentityExtensions
 {
-    public static IServiceCollection AddIdentityServices(this IServiceCollection services)
+    public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration configuration)
     {
+        var jwtSettings = configuration.GetSection("JwtSettings");
+        
+        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IAuthService, AuthService>();
+
         services.AddIdentityCore<User>()
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<FlightBookingDbContext>()
-            .AddApiEndpoints();
+            .AddSignInManager();
 
-        services.AddCors(options =>
-        {
-            options.AddPolicy(name: "allowall",
-                policy =>
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    policy.WithOrigins("http://localhost:5173").AllowCredentials().AllowAnyHeader().AllowAnyMethod();
-                });
-        });
-
-        services.AddAuthentication(options => { options.DefaultAuthenticateScheme = IdentityConstants.BearerScheme; })
-            .AddBearerToken(IdentityConstants.BearerScheme);
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtSettings["Issuer"],
+                    ValidAudience = jwtSettings["Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"])),
+                    ClockSkew = TimeSpan.Zero
+                };
+                
+                options.RequireHttpsMetadata = true;
+                options.SaveToken = true;
+            });
 
         services.AddAuthorization();
 
@@ -31,7 +48,7 @@ public static class IdentityExtensions
 
     public static void MapIdentityRoutes(this WebApplication app)
     {
-        app.UseCors("allowall");
-        app.MapIdentityApi<User>();
+        app.UseAuthentication();
+        app.UseAuthorization();
     }
 }
